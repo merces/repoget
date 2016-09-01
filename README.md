@@ -13,15 +13,22 @@
 ## What's that?
 
 repoget creates a directory with the same name as the username given
-and downloads (clones) all user's repositories to it. It also creates
-a subdirectory for the gists at username/gists. Tested on OS X and
-Linux only.
+and downloads (clones) all user's Github repositories to it. It also
+creates a subdirectory for the gists at username/gists.
+
+This program is tested on OS X and Linux only.
 
 ## Installation
 
     # pip install pygithub gitpython
+    $ git clone https://github.com/merces/repoget.git
+    $ cd repoget/
 
-## Example usage
+## Usage
+
+    $ python repoget.py <github_username>
+
+## Example
 
     $ python repoget.py merces
     Creating ./merces directory...
