@@ -1,56 +1,40 @@
-#!/usr/bin/env python
-
-# pip install pygithub gitpython
+#!/usr/bin/env python3
 
 import os, sys
-from pygithub3 import Github
+from github import Github
 from git import Repo
 
-# Set user to None for gist repositories
-def clone_repository(user, repo, path):
-   try:
-      if user:
-         Repo.clone_from('https://github.com/%s/%s.git' % (user, repo), path)
-      else:
-         # repo is the gist hash then
-         Repo.clone_from('https://gist.github.com/%s.git' % repo, path)
-   except:
-      print 'Error cloning \'%s\'' % repo
+CLONE_FORKS = False
+GITHUB_PERSONAL_ACCESS_TOKEN = "" # https://github.com/settings/tokens
+
+g = Github(GITHUB_PERSONAL_ACCESS_TOKEN if GITHUB_PERSONAL_ACCESS_TOKEN else None)
 
 try:
-   ghuser = sys.argv[1]
+	username = sys.argv[1]
 except:
-   print "                                                     888    "
-   print "                                                     888    "
-   print "                                                     888    "
-   print "888d888  .d88b.  88888b.   .d88b.   .d88b.   .d88b.  888888 "
-   print "888P\"   d8P  Y8b 888 \"88b d88\"\"88b d88P\"88b d8P  Y8b 888    "
-   print "888     88888888 888  888 888  888 888  888 88888888 888    "
-   print "888     Y8b.     888 d88P Y88..88P Y88b 888 Y8b.     Y88b.  "
-   print "888      \"Y8888  88888P\"   \"Y88P\"   \"Y88888  \"Y8888   \"Y888 "
-   print "                 888                    888                 "
-   print "                 888               Y8b d88P                 "
-   print "                 888                \"Y88P\"             v0.1\n"
-   print 'This program downloads all git repositories and gists from a given Github username.\n\n\
-Usage:\n\t%s <github_username>\n' % sys.argv[0]
-   sys.exit(1)
+	print("Usage:\n\t%s <github_username>" % sys.argv[0])
+	sys.exit(1)
 
-try:
-   print 'Creating ./%s directory...' % ghuser
-   os.mkdir(ghuser)
-except:
-   print 'Error: no write permission or directory already exists. You should fix that.'
-   sys.exit(1)
+u = g.get_user(username)
 
-gh = Github()
-repos = gh.repos.list(user=ghuser, type='owner')
-print 'Cloning repositories...'
-for i in repos.iterator():
-   print ' %s/%s' % (ghuser, i.name)
-   clone_repository(ghuser, i.name, '%s/%s' % (ghuser, i.name))
+for repo in u.get_repos():
+	try:
+		if repo.parent:
+			if CLONE_FORKS:
+				print("Cloning %s, which was forked from %s..." % (repo.name, repo.parent.full_name))
+				Repo.clone_from(repo.clone_url, username + "/forks/" + repo.name)
+			else:
+				print("Skipping %s because it is was forked from %s..." % (repo.name, repo.parent.full_name))
+		else:
+			print("Cloning %s..." % repo.name)
+			Repo.clone_from(repo.clone_url, username + "/repos/" + repo.name)
+	except:
+		continue
+		
+for gist in u.get_gists():
+	try:
+		print("Cloning gist ID %s (%s)..." % (gist.id, gist.description))
+		Repo.clone_from(gist.git_pull_url, username + "/gists/" + gist.description)
+	except:
+		continue
 
-gists = gh.gists.list(user=ghuser)
-print 'Cloning gists repositories...'
-for i in gists.iterator():
-   print ' %s/gists/%s (%s)' % (ghuser, i.id, i.description)
-   clone_repository(None, i.id, '%s/gists/%s' % (ghuser, i.id))
