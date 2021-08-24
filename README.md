@@ -10,11 +10,20 @@
                      888               Y8b d88P                 
                      888                "Y88P"                  
 
-## What's that?
+## What?
 
-repoget creates a directory with the same name as the username given
-and downloads (clones) all user's Github repositories to it. It also
-creates a subdirectory for the gists at username/gists.
+repoget clones all repositores and gists from a given
+Github user name.
+
+## Why
+
+During OSINT investigations, you may want to see all logged events
+in a repo with commands like `git log` and so on. This is only
+possible if you clone the repo instead of just downloading it.
+
+This script is also userful to just download everytihng from a
+Github user handle, as a form of backup in case the person deletes
+the account or someone takes it down for some reason.
 
 ## Installation
 
@@ -24,9 +33,15 @@ creates a subdirectory for the gists at username/gists.
 
 ## Usage
 
+Before using it, consider adding a Github
+[Personal access token](https://github.com/settings/tokens) to `repoget.py`,
+otherwise you will be limited by the number of unauthenticated requests Github allows.
+
     $ python3 repoget.py <github_username>
 
 ## Example
+
+Clone all repos and gists from `github.com/merces`:
 
 ```
 $ python3 repoget.py merces
@@ -60,3 +75,4 @@ Cloning gist ID 1336cd4739cb1368efed (TLS callback implementation in C)...
 Cloning gist ID 36ce6e9602c163cf129e (A minimalist shell skeleton)...
 Cloning gist ID 4124617 (devprot - (un)set write protection flag in block devices)...
 ```
+You'll find the repos in `merces/repos` and the gists in `merces/gists`.
