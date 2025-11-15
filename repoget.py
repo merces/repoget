@@ -7,7 +7,7 @@ from git import Repo
 CLONE_FORKS = False
 GITHUB_PERSONAL_ACCESS_TOKEN = "" # https://github.com/settings/tokens
 
-g = Github(GITHUB_PERSONAL_ACCESS_TOKEN if GITHUB_PERSONAL_ACCESS_TOKEN else None)
+g = Github(auth=Auth.Token(GITHUB_PERSONAL_ACCESS_TOKEN)) if GITHUB_PERSONAL_ACCESS_TOKEN else Github()
 
 try:
     username = sys.argv[1]
