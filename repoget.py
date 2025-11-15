@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
-import os, sys
-from github import Github
+import sys
+from github import Github, Auth
 from git import Repo
 
 CLONE_FORKS = False
@@ -15,7 +15,10 @@ except:
     print("Usage:\n\t%s <github_username>" % sys.argv[0])
     sys.exit(1)
 
-u = g.get_user(username)
+try:
+    u = g.get_user(username)
+except:
+    sys.exit(1)
 
 for repo in u.get_repos():
     try:
@@ -24,13 +27,13 @@ for repo in u.get_repos():
                 print("Cloning %s, which was forked from %s..." % (repo.name, repo.parent.full_name))
                 Repo.clone_from(repo.clone_url, username + "/forks/" + repo.name)
             else:
-                print("Skipping %s because it is was forked from %s..." % (repo.name, repo.parent.full_name))
+                print("Skipping %s because it was forked from %s..." % (repo.name, repo.parent.full_name))
         else:
             print("Cloning %s..." % repo.name)
             Repo.clone_from(repo.clone_url, username + "/repos/" + repo.name)
     except:
         continue
-        
+
 for gist in u.get_gists():
     try:
         print("Cloning gist ID %s (%s)..." % (gist.id, gist.description))
@@ -38,4 +41,3 @@ for gist in u.get_gists():
         Repo.clone_from(gist.git_pull_url, username + "/gists/" + dirname)
     except:
         continue
-
