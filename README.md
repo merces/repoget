@@ -1,3 +1,4 @@
+```
                                                          888    
                                                          888    
                                                          888    
@@ -10,69 +11,60 @@
                      888               Y8b d88P                 
                      888                "Y88P"                  
 
+```
+
 ## What?
 
-repoget clones all repositores and gists from a given
-Github user name.
+**repoget** clones all repositories and gists from a given
+GitHub username.
 
 ## Why
 
-During OSINT investigations, you may want to see all logged events
-in a repo with commands like `git log` and so on. This is only
-possible if you clone the repo instead of just downloading it.
+During OSINT investigations, you may want to inspect all logged events
+in a repository using commands like `git log`. This is only possible if
+you clone the repository instead of just downloading an archive.
 
-This script is also userful to just download everytihng from a
-Github user handle, as a form of backup in case the person deletes
-the account or someone takes it down for some reason.
+This script is also useful for downloading everything from a
+GitHub user as a form of backup, in case the person deletes the account
+or the account is taken down for some reason.
 
 ## Installation
 
-    # pip install PyGithub GitPython
-    $ git clone https://github.com/merces/repoget.git
-    $ cd repoget/
+```sh
+git clone https://github.com/merces/repoget.git
+cd repoget/
+python -m venv venv
+. venv/bin/activate
+pip install -r requirements.txt
+```
 
 ## Usage
 
-Before using it, consider adding a Github
-[Personal access token](https://github.com/settings/tokens) to `repoget.py`,
-otherwise you will be limited by the number of unauthenticated requests Github allows.
+Before using it, consider adding a GitHub
+[personal access token](https://github.com/settings/tokens) to `repoget.py`,
+otherwise you will be limited by the number of unauthenticated requests GitHub allows.
 
-    $ python3 repoget.py <github_username>
+```sh
+python repoget.py <github_username>
+```
 
 ## Example
 
 Clone all repos and gists from `github.com/merces`:
 
-```
-$ python3 repoget.py merces
+```sh
+python repoget.py merces
 Cloning aleph...
 Cloning bashacks...
 Cloning bonzim...
 Cloning check-password...
-Skipping codingknite because it is was forked from codingknite/codingknite...
-Skipping Detect-It-Easy because it is was forked from horsicq/Detect-It-Easy...
-Skipping docs because it is was forked from HyperDbg/docs...
-Cloning examine...
-Cloning filegrab...
-Cloning hdump...
-Cloning libpe...
-Cloning merces...
-Cloning opcoder...
-Cloning openvaccine...
-Cloning pev...
-Cloning repoget...
-Cloning rt3070-linux3...
-Cloning scripts...
-Cloning showcomments...
+Skipping Detect-It-Easy because it was forked from horsicq/Detect-It-Easy...
+Skipping docs because it was forked from HyperDbg/docs...
 Cloning umbreon_check...
-Cloning usbforce...
 Cloning gist ID d9188c2670caf28e70d3d3f6f6e1ceb5 (read a file using libbfd)...
 Cloning gist ID 6efa466a60c67451f028f5d4f24f9404 ()...
 Cloning gist ID 283a905fd9132b17ad9dc4664e6f8bc1 (5 star rank in PHP)...
 Cloning gist ID ca5aef8fbd09f2d66224 (Looping and modifying without changing its pointer)...
-Cloning gist ID eb73556139a770443756 (A stenography challenge solution)...
-Cloning gist ID 1336cd4739cb1368efed (TLS callback implementation in C)...
-Cloning gist ID 36ce6e9602c163cf129e (A minimalist shell skeleton)...
-Cloning gist ID 4124617 (devprot - (un)set write protection flag in block devices)...
 ```
-You'll find the repos in `merces/repos` and the gists in `merces/gists`.
+
+You'll find the repositories in `merces/repos` and the gists in `merces/gists`.
